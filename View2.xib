@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10117" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="View2" customModule="Color_Reader" customModuleProvider="target">
+            <connections>
+                <outlet property="ColorImageView" destination="AkF-PK-quI" id="oeu-uF-62n"/>
+                <outlet property="ColorLabel" destination="KG9-eh-8eT" id="JlK-vE-zvM"/>
+                <outlet property="HexLabel" destination="eTW-vE-m61" id="qw7-Ho-q8s"/>
+                <outlet property="SaveColorButton" destination="1hd-ft-pif" id="lMp-Nl-NzM"/>
+                <outlet property="TakeAnotherButton" destination="o4N-18-qIl" id="4cC-c1-69s"/>
+                <outlet property="cameraView" destination="TdB-Or-vSn" id="ZOZ-sh-gxT"/>
+                <outlet property="colorView" destination="SRI-JO-oBX" id="U02-9Q-t59"/>
+                <outlet property="tempImageView" destination="vlR-Cy-8sw" id="lhF-MK-xGn"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TdB-Or-vSn">
+                    <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                </view>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vlR-Cy-8sw">
+                    <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                </imageView>
+                <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SRI-JO-oBX">
+                    <rect key="frame" x="303" y="-26" width="297" height="742"/>
+                    <subviews>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KG9-eh-8eT">
+                            <rect key="frame" x="-134" y="58" width="592" height="27"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eTW-vE-m61">
+                            <rect key="frame" x="112" y="129" width="100" height="21"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1hd-ft-pif">
+                            <rect key="frame" x="125" y="349" width="74" height="30"/>
+                            <state key="normal" title="Save Color"/>
+                            <connections>
+                                <action selector="SaveColor:" destination="-1" eventType="touchUpInside" id="jAc-mx-Vfh"/>
+                            </connections>
+                        </button>
+                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="AkF-PK-quI">
+                            <rect key="frame" x="112" y="167" width="100" height="100"/>
+                        </imageView>
+                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="o4N-18-qIl">
+                            <rect key="frame" x="95" y="307" width="134" height="30"/>
+                            <state key="normal" title="Scan Another Color"/>
+                            <connections>
+                                <action selector="TakeAnother:" destination="-1" eventType="touchUpInside" id="tS9-AV-Upr"/>
+                            </connections>
+                        </button>
+                    </subviews>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                </view>
+            </subviews>
+            <color key="backgroundColor" red="0.80000001190000003" green="0.40000000600000002" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+            <constraints>
+                <constraint firstItem="TdB-Or-vSn" firstAttribute="centerY" secondItem="i5M-Pr-FkT" secondAttribute="centerY" id="124-DM-OvV"/>
+                <constraint firstAttribute="bottom" secondItem="TdB-Or-vSn" secondAttribute="bottom" id="C3l-cw-aSX"/>
+                <constraint firstItem="SRI-JO-oBX" firstAttribute="centerX" secondItem="TdB-Or-vSn" secondAttribute="centerX" id="KwF-6d-vSf"/>
+                <constraint firstItem="SRI-JO-oBX" firstAttribute="height" secondItem="i5M-Pr-FkT" secondAttribute="height" id="Mi4-He-qSp"/>
+                <constraint firstAttribute="trailing" secondItem="TdB-Or-vSn" secondAttribute="trailing" id="QNQ-wI-f4O"/>
+                <constraint firstItem="TdB-Or-vSn" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="WcM-wO-VVQ"/>
+                <constraint firstItem="TdB-Or-vSn" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="dQK-iD-X5z"/>
+                <constraint firstItem="TdB-Or-vSn" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="oPb-AE-wDz"/>
+                <constraint firstItem="SRI-JO-oBX" firstAttribute="width" secondItem="i5M-Pr-FkT" secondAttribute="width" id="sRE-RJ-0bG"/>
+                <constraint firstItem="SRI-JO-oBX" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="t6S-3t-W32"/>
+                <constraint firstItem="SRI-JO-oBX" firstAttribute="centerY" secondItem="i5M-Pr-FkT" secondAttribute="centerY" id="uc2-Xb-MqN"/>
+                <constraint firstItem="SRI-JO-oBX" firstAttribute="centerY" secondItem="TdB-Or-vSn" secondAttribute="centerY" id="ymH-Ev-uLz"/>
+            </constraints>
+        </view>
+    </objects>
+</document>
