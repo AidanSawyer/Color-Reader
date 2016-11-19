@@ -247,6 +247,10 @@ class View2: UIViewController, UIImagePickerControllerDelegate, UINavigationCont
                     self.Red = r/100
                     self.Green = g/100
                     self.Blue = b/100
+                    
+                    var ColorDictionary: [String:Int]
+                    
+                    ColorDictionary = ["White": 255255255]
                 }
             })
         }

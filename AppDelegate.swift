@@ -4,6 +4,7 @@
 //
 //  Created by Aidan Sawyer on 6/14/16.
 //  Copyright © 2016 Aidan Sawyer. All rights reserved.
+//
 
 import UIKit
 
@@ -14,9 +15,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
-      
-        
-        // Override point for customization after application launch.
+    
+        //// Override point for customization after application launch.
+        PlistManager.sharedInstance.startPlistManager()
         return true
     }
 

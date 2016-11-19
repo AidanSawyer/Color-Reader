@@ -14,6 +14,7 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+    
         
         var V1: View1 = View1(nibName: "View1", bundle: nil)
         var V2: View2 = View2(nibName: "View2", bundle: nil)

@@ -26,11 +26,15 @@ public var Green = CGFloat()
 class View3: UITableViewController {
 
     //var decodedColors: [Color] = [Color.init(name: "A", hexCode: "#000000", Red: 0, Green: 0, Blue: 0)]
-    func getSavedColors() -> [Color]{
+    //func getSavedColors() -> [Color]{
      
-    }
+    //}
 
-    var Colors: [Color] = [Color.init(name: "Color", hexCode: "#777777", Red: 150, Green: 150, Blue: 150)]
+    var Colors: [Color] = [Color.init(name: "Hampton Gold", hexCode: "#777777", Red: 255, Green: 209, Blue: 0), Color.init(name: "Hampton Blue", hexCode: "234231", Red: 0, Green: 38, Blue: 135)]
+    //var ColorArray: [Color] = [PlistManager.getValueForKey("Color1")]
+    
+    
+    
     override func viewDidLoad() {
         
         super.viewDidLoad()
@@ -55,9 +59,21 @@ class View3: UITableViewController {
         
        let colorCell = tableView.dequeueReusableCellWithIdentifier("CellId", forIndexPath: indexPath) as! ColorCell
         colorCell.nameLabel.text = Colors[indexPath.row].name as String
-        Red = Colors[indexPath.row].Red
-        Green = Colors[indexPath.row].Green
-        Blue = Colors[indexPath.row].Blue
+        
+        Red = Colors[indexPath.row].Red as CGFloat
+        Green = Colors[indexPath.row].Green as CGFloat
+        Blue = Colors[indexPath.row].Blue as CGFloat
+        
+        var redFinal = Red/255
+        var greenFinal = Green/255
+        var blueFinal = Blue/255
+        
+        print("------------------------------", Red)
+        
+        
+        colorCell.colorImage.backgroundColor = UIColor(red: redFinal, green: greenFinal, blue: blueFinal, alpha: 1)
+        //print(Colors[indexPath.row].Red)
+        
         return colorCell
     }
 
@@ -70,6 +86,8 @@ class View3: UITableViewController {
         
         return 120
     }
+    
+    //func deleteCell()
 
 }
 
