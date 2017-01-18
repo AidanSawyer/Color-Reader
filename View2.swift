@@ -18,9 +18,9 @@ extension UIImage {
   /*
      gets the rgba data in an array of CGFloat's of a specified pixel (pos)
  */
-    func getPixelColor(pos: CGPoint) -> [CGFloat] {
+    func getPixelColor(_ pos: CGPoint) -> [CGFloat] {
         
-        let pixelData = CGDataProviderCopyData(CGImageGetDataProvider(self.CGImage))
+        let pixelData = self.cgImage?.dataProvider?.data
         let data: UnsafePointer<UInt8> = CFDataGetBytePtr(pixelData)
         
         let pixelInfo: Int = ((Int(self.size.width) * Int(pos.y)) + Int(pos.x)) * 4
@@ -31,14 +31,15 @@ extension UIImage {
         let a = CGFloat(data[pixelInfo+3]) / CGFloat(255.0)
         
         
-        var Color: [CGFloat] = [r*100, g*100, b*100]
+        let Color: [CGFloat] = [r*100, g*100, b*100]
         
         
         return Color
     }
 
 }
-public var userDefaults = NSUserDefaults()
+var ColorList = [Color]()
+
 class View2: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
     var captureSession: AVCaptureSession?
@@ -58,7 +59,7 @@ class View2: UIViewController, UIImagePickerControllerDelegate, UINavigationCont
     var FirstTake: Bool = false
     var loopCount = 0
     
-    var Colors = [Color]()
+   
     var hexCode: String = ""
     var Red = CGFloat()
     var Green = CGFloat()
@@ -69,11 +70,11 @@ class View2: UIViewController, UIImagePickerControllerDelegate, UINavigationCont
         super.viewDidLoad()
         self.view.addSubview(colorView)
         
-        colorView.backgroundColor = UIColor.whiteColor()
-        ColorImageView.hidden = true
+        colorView.backgroundColor = UIColor.white
+        ColorImageView.isHidden = true
         HexLabel.text = ""
-        TakeAnotherButton.hidden = true
-        SaveColorButton.hidden = true
+        TakeAnotherButton.isHidden = true
+        SaveColorButton.isHidden = true
         
         
         ColorImageView.layer.borderWidth = 5
@@ -84,16 +85,16 @@ class View2: UIViewController, UIImagePickerControllerDelegate, UINavigationCont
         // Dispose of any resources that can be recreated.
     }
     
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         previewLayer?.frame = cameraView.bounds
     }
 
-    func IntToCGFloat(x:Int) -> CGFloat{
+    func IntToCGFloat(_ x:Int) -> CGFloat{
         return CGFloat(x)
     }
     
-    func Hex(x: Int) -> String{
+    func Hex(_ x: Int) -> String{
         
         let B16: String = String(x, radix: 16)
         var hex = ""
@@ -107,14 +108,14 @@ class View2: UIViewController, UIImagePickerControllerDelegate, UINavigationCont
     }
     
     //code for taking the photo
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        colorView.hidden = true
+        colorView.isHidden = true
         captureSession = AVCaptureSession()
         captureSession?.sessionPreset = AVCaptureSessionPreset1920x1080
         
-        var backCamera = AVCaptureDevice.defaultDeviceWithMediaType(AVMediaTypeVideo)
+        let backCamera = AVCaptureDevice.defaultDevice(withMediaType: AVMediaTypeVideo)
         
         var input: AVCaptureDeviceInput
         var error = false
@@ -132,7 +133,7 @@ class View2: UIViewController, UIImagePickerControllerDelegate, UINavigationCont
                     
                     previewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
                     previewLayer?.videoGravity = AVLayerVideoGravityResizeAspect
-                    previewLayer?.connection.videoOrientation = AVCaptureVideoOrientation.Portrait
+                    previewLayer?.connection.videoOrientation = AVCaptureVideoOrientation.portrait
                     
                     captureSession?.sessionPreset = AVCaptureSessionPresetPhoto
                     
@@ -155,27 +156,27 @@ class View2: UIViewController, UIImagePickerControllerDelegate, UINavigationCont
     //retreiving the photo
     func didPressTakePhoto(){
         
-        if let videoConnection = stillImageOutput?.connectionWithMediaType(AVMediaTypeVideo){
-            videoConnection.videoOrientation = AVCaptureVideoOrientation.Portrait
-            stillImageOutput?.captureStillImageAsynchronouslyFromConnection(videoConnection, completionHandler: {
+        if let videoConnection = stillImageOutput?.connection(withMediaType: AVMediaTypeVideo){
+            videoConnection.videoOrientation = AVCaptureVideoOrientation.portrait
+            stillImageOutput?.captureStillImageAsynchronously(from: videoConnection, completionHandler: {
                 (sampleBuffer, error) in
                 if sampleBuffer != nil {
                     
-                    var imageData = AVCaptureStillImageOutput.jpegStillImageNSDataRepresentation(sampleBuffer)
-                    var dataProvider = CGDataProviderCreateWithCFData(imageData)
-                    var cgImageRef = CGImageCreateWithJPEGDataProvider(dataProvider, nil, true, CGColorRenderingIntent.RenderingIntentDefault)
+                    let imageData = AVCaptureStillImageOutput.jpegStillImageNSDataRepresentation(sampleBuffer)
+                    let dataProvider = CGDataProvider(data: imageData as! CFData)
+                    let cgImageRef = CGImage(jpegDataProviderSource: dataProvider!, decode: nil, shouldInterpolate: true, intent: CGColorRenderingIntent.defaultIntent)
                     
-                    var image = UIImage(CGImage: cgImageRef!, scale: 1.0, orientation: UIImageOrientation.Right)
+                    let image = UIImage(cgImage: cgImageRef!, scale: 1.0, orientation: UIImageOrientation.right)
                     
                     
                     /*
                         Code Below (here to end of function) deals with retreiving the rgb data of the center 8x8 pixels, averaging then making the averaged pixels in to an array
                     */
-                    var xMin = Int(image.size.width/2 - 4) //minimum x value in the 8x8 square
-                    var xMax = Int(image.size.width/2 + 4) //maximum x value in 8x8 square
+                    let xMin = Int(image.size.width/2 - 4) //minimum x value in the 8x8 square
+                    let xMax = Int(image.size.width/2 + 4) //maximum x value in 8x8 square
                     
-                    var yMin = Int(image.size.height/2 - 4) //minimum y value in 8x8 square
-                    var yMax = Int(image.size.height/2 + 4) //maximum y value in 8x8 square
+                    let yMin = Int(image.size.height/2 - 4) //minimum y value in 8x8 square
+                    let yMax = Int(image.size.height/2 + 4) //maximum y value in 8x8 square
                     
                     
                     var iterationCount: Int = 0
@@ -192,17 +193,17 @@ class View2: UIViewController, UIImagePickerControllerDelegate, UINavigationCont
                     for x in xMin..<xMax{
                         for y in yMin..<yMax{
                             
-                            var yInt = CGFloat(y)
-                            var xInt = CGFloat(x)
+                            let yInt = CGFloat(y)
+                            let xInt = CGFloat(x)
                             
                             
-                            print("x: " , x)
-                            print("y: ", y)
-                            print(image.getPixelColor(CGPointMake(yInt*2.55, xInt*2.55)))
-                            print("-------")
+                            //print("x: " , x)
+                            //print("y: ", y)
+                            //print(image.getPixelColor(CGPointMake(yInt*2.55, xInt*2.55)))
+                            //print("-------")
                             
                             
-                            PixelArray.append(image.getPixelColor(CGPointMake(yInt, xInt)))
+                            PixelArray.append(image.getPixelColor(CGPoint(x: yInt, y: xInt)))
                             iterationCount += 1
                         }
                     }
@@ -222,9 +223,9 @@ class View2: UIViewController, UIImagePickerControllerDelegate, UINavigationCont
                         blue += PixelArray[i][2]
 
                     }
-                    print("Final Red Value: ",  String((red/64)*2.55))
-                    print("Final Green Value: ", String((green/64)*2.55))
-                    print("Final Blue Value: ", String((blue/64)*2.55))
+                   // print("Final Red Value: ",  String((red/64)*2.55))
+                    //print("Final Green Value: ", String((green/64)*2.55))
+                    //print("Final Blue Value: ", String((blue/64)*2.55))
                     var averageColor = [red/64, green/64, blue/64]
                     
                     let r = round(red/64)
@@ -233,14 +234,14 @@ class View2: UIViewController, UIImagePickerControllerDelegate, UINavigationCont
                     
                     let hex = self.Hex(Int(r*2.55)) + self.Hex(Int(g*2.55)) + self.Hex(Int(b*2.55))
                     self.hexCode = hex
-                    print("final hexadecimal: #" + hex)
+                    //print("final hexadecimal: #" + hex)
                     self.loopCount = iterationCount/64 * 100
                     self.ColorLabel.text = "Color Information Loaded"
                     self.HexLabel.text = "#" + hex
                     
-                    self.ColorImageView.layer.borderColor = UIColor.blackColor().CGColor
+                    self.ColorImageView.layer.borderColor = UIColor.black.cgColor
                     self.ColorImageView.backgroundColor = UIColor(red: r/100, green: g/100, blue: b/100, alpha: 1)
-                    self.ColorImageView.hidden = false
+                    self.ColorImageView.isHidden = false
                     
                     self.FirstTake = true
                 
@@ -248,16 +249,16 @@ class View2: UIViewController, UIImagePickerControllerDelegate, UINavigationCont
                     self.Green = g/100
                     self.Blue = b/100
                     
-                    var ColorDictionary: [String:Int]
+                    //var ColorDictionary: [String:Int]
                     
-                    ColorDictionary = ["White": 255255255]
+                    //ColorDictionary = ["White": 255255255]
                 }
             })
         }
         
     }
     
-    func SortColorData(Data: [CGFloat]) -> CGFloat{
+    func SortColorData(_ Data: [CGFloat]) -> CGFloat{
         
         
         return 1
@@ -268,7 +269,7 @@ class View2: UIViewController, UIImagePickerControllerDelegate, UINavigationCont
     func didPressTakeAnother(){
         
         if didTakePhoto == true{
-            tempImageView.hidden = true
+            tempImageView.isHidden = true
             didTakePhoto = false
         }else{
             captureSession?.startRunning()
@@ -281,60 +282,70 @@ class View2: UIViewController, UIImagePickerControllerDelegate, UINavigationCont
     }
     
     
-    @IBAction func TakeAnother(sender: AnyObject) {
+    @IBAction func TakeAnother(_ sender: AnyObject) {
         
         
         didPressTakeAnother()
-        colorView.hidden = true
-        ColorImageView.hidden = true
+        colorView.isHidden = true
+        ColorImageView.isHidden = true
         HexLabel.text = ""
         
     }
     
-    @IBAction func SaveColor(sender: AnyObject) {
+    
+
+    
+   /* @IBAction func SaveColor(sender: AnyObject) {
         
         //get name
-        
+        var name = String()
         var textField: UITextField = UITextField()
-        
         var alert = UIAlertController(title: "Enter Color Name", message: "Enter Color Name", preferredStyle: .Alert)
         alert.addTextFieldWithConfigurationHandler({ (textField) -> Void in
             textField.text = "enter name here"
         })
         alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: { (action) -> Void in
             textField = alert.textFields![0] as UITextField
-            print("Text field: \(textField.text)")
+            var name = textField.text
+            print("Text field: \(name)")
+            
         }))
         self.presentViewController(alert, animated: true, completion: nil)
         
-        Colors.append(Color(name: String(textField), hexCode: hexCode, Red: Red, Green: Green, Blue: Blue))
-        
-        //archive data
         /*
-        var userDefaults = NSUserDefaults.standardUserDefaults()
-        let encodedData = NSKeyedArchiver.archivedDataWithRootObject(Colors)
-        userDefaults.setObject(encodedData, forKey: "Colors")
-        userDefaults.synchronize()
-         */
-        
+        let defaults = NSUserDefaults.standardUserDefaults()
+        ColorList.append(Color.init(name: name, hexCode: hexCode, Red: Red, Green: Green, Blue: Blue))
+        print(name, " ", hexCode)
+        print(ColorList)
+        print(ColorList.count)
+        ColorList = defaults.objectForKey("ColorList") as? [Color] ?? [Color]()
 
+        defaults.setObject(ColorList, forKey: "ColorList")
+        defaults.synchronize()
+ */
+        ColorList.append(Color(name: name, hexCode: hexCode, Red: Red, Green: Green, Blue: Blue))
+        print(ColorList.count)
+        print(ColorList[0].name)
         
-        print(Colors)
-        
+        let defaults = NSUserDefaults.standardUserDefaults()
+        ColorList = defaults.objectForKey("ColorList") as? [Color] ?? [Color]()
+        defaults.setObject(ColorList, forKey: "ColorList")
+        defaults.synchronize()
     }
-    
-    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    */
         
-        if colorView.hidden == true{
+    override func touchesBegan(_ touches: Set<UITouch>, withEvent event: UIEvent?) {
+        
+        if colorView.isHidden == true{
             didPressTakeAnother()
             print("touch")
         
-            colorView.hidden = false
+            colorView.isHidden = false
             ColorLabel.text = "Loading Color Information"
         
-            TakeAnotherButton.hidden = false
-            SaveColorButton.hidden = false
-            HexLabel.hidden = false
+            TakeAnotherButton.isHidden = false
+            SaveColorButton.isHidden = false
+            HexLabel.isHidden = false
             
         }
         

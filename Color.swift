@@ -27,19 +27,19 @@ class Color: NSObject, NSCoding {
     
     required convenience init(coder aDecoder: NSCoder) {
         
-        let name = aDecoder.decodeObjectForKey("name") as! String
-        let hexCode = aDecoder.decodeObjectForKey("hexCode") as! String
-        let Red = aDecoder.decodeObjectForKey("Red") as! CGFloat
-        let Green = aDecoder.decodeObjectForKey("Green") as! CGFloat
-        let Blue = aDecoder.decodeObjectForKey("Blue") as! CGFloat
-        self.init(name:name, hexCode: hexCode, Red: Red, Green: Green, Blue: Blue)
+        let name = aDecoder.decodeObject(forKey: "name") as! String
+        let hexCode = aDecoder.decodeObject(forKey: "hexCode") as! String
+        let Red = aDecoder.decodeObject(forKey: "Red") as! CGFloat
+        let Green = aDecoder.decodeObject(forKey: "Green") as! CGFloat
+        let Blue = aDecoder.decodeObject(forKey: "Blue") as! CGFloat
+        self.init(name:name as NSString, hexCode: hexCode as NSString, Red: Red, Green: Green, Blue: Blue)
         
     }
     
-    func encodeWithCoder(aCoder: NSCoder) {
+    func encode(with aCoder: NSCoder) {
         
-        aCoder.encodeObject(name, forKey: "name")
-        aCoder.encodeObject(hexCode, forKey: "hexCode")
+        aCoder.encode(name, forKey: "name")
+        aCoder.encode(hexCode, forKey: "hexCode")
         
     }
 }
